@@ -1,0 +1,70 @@
+# Importing Libraries
+
+import pandas as pd
+import numpy as np
+import seaborn as sn
+import matplotlib as plt 
+
+# Import Dataset
+
+path = "/Users/shahzaibali/downloads"
+data = pd.read_csv(path + "/heart.csv")
+
+# Count null values
+
+data.isnull().sum(axis=0)
+data.isna().sum(axis=0)
+
+Count Rows with 0 in the following Variables
+
+data[(data.RestingBP == 0)].count()[2 ]
+data[(data.Cholesterol == 0)].count()[1 ]
+
+# Remove rows with 0 and save in data object
+
+data = data[(data.Cholesterol != 0)]
+
+# Get 5 number summary for each variable
+
+data.describe()
+
+# Bar plot by chestpain and sex for RestingBP and Cholesterol 
+
+ex = data.groupby(['Sex', 'ChestPainType' ]).mean()
+ex = ex.iloc[:,:3]
+ex.plot(kind = 'bar')
+
+# Bar plot by chestpain and sex and Heart Disease for RestingBP and Cholesterol
+
+ex = data.groupby(['Sex', 'ChestPainType', 'HeartDisease']).mean()
+ex = ex.iloc[:,:3]
+ex.plot(kind = 'bar')
+
+ex = data.groupby(['HeartDisease', 'Sex']).mean()
+ex = ex.iloc[:,:3]
+ex.plot(kind = 'bar')
+
+# Boxplots
+
+sn.boxplot(x = 'HeartDisease', y = 'RestingBP', data = data)
+sn.boxplot(x = 'Sex', y = 'RestingBP', data = data)
+sn.boxplot(x = 'HeartDisease', y = 'Cholesterol' , data = data)
+sn.boxplot(x = 'Sex', y = 'Cholesterol' , data = data)
+
+# Correlation Matrix
+
+sn.heatmap(data.corr(), center = 0, annot = True)
+
+# Distribution Plots
+
+sn.histplot(data = data, x = 'Age')
+sn.histplot(data = data, x = 'Cholesterol')
+
+sn.histplot(data = data, x = 'RestingBP')
+sn.pairplot(data, hue = 'Sex')
+
+# Linear Regression Plot
+
+sn.lmplot(x="RestingBP", y="Cholesterol", hue="HeartDisease", data=data)
+
+
